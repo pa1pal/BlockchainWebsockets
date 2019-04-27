@@ -7,32 +7,78 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:elevation="4dp">
+        android:elevation="4dp"
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ECEADB"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/transaction_hash"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transaction Hash" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/transaction_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Transaction Amount" />
+                <TextView
+                    android:id="@+id/hash"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Transaction Hash :" />
 
-            <TextView
-                android:id="@+id/transaction_time"
+                <TextView
+                    android:id="@+id/transaction_hash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transaction Hash" />
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Transaction Time" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Transaction Amount :" />
+
+                <TextView
+                    android:id="@+id/transaction_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transaction Amount" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Transaction Time :" />
+
+                <TextView
+                    android:id="@+id/transaction_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transaction Time" />
+            </LinearLayout>
+
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+
 </LinearLayout>

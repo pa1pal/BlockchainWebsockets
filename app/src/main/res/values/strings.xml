@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BitcoinBlockchain</string>
+    <string name="clear_transactions">Clear Transactions</string>
 </resources>

@@ -13,6 +13,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:padding="8dp"
+        android:background="#E5E9F0"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
@@ -56,5 +57,13 @@
         android:id="@+id/transaction_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="8dp"
         android:layout_weight="1" />
+    
+    <Button
+        android:id="@+id/clear_transactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@string/clear_transactions" />
 </LinearLayout>

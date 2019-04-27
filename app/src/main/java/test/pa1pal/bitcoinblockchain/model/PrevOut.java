@@ -9,19 +9,19 @@ public class PrevOut {
     private Boolean spent;
     @SerializedName("tx_index")
     @Expose
-    private Integer txIndex;
+    private Long txIndex;
     @SerializedName("type")
     @Expose
-    private Integer type;
+    private Long type;
     @SerializedName("addr")
     @Expose
     private String addr;
     @SerializedName("value")
     @Expose
-    private Integer value;
+    private Long value;
     @SerializedName("n")
     @Expose
-    private Integer n;
+    private Long n;
     @SerializedName("script")
     @Expose
     private String script;
@@ -34,19 +34,19 @@ public class PrevOut {
         this.spent = spent;
     }
 
-    public Integer getTxIndex() {
+    public Long getTxIndex() {
         return txIndex;
     }
 
-    public void setTxIndex(Integer txIndex) {
+    public void setTxIndex(Long txIndex) {
         this.txIndex = txIndex;
     }
 
-    public Integer getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(Long type) {
         this.type = type;
     }
 
@@ -58,19 +58,19 @@ public class PrevOut {
         this.addr = addr;
     }
 
-    public Integer getValue() {
+    public Long getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Long value) {
         this.value = value;
     }
 
-    public Integer getN() {
+    public Long getN() {
         return n;
     }
 
-    public void setN(Integer n) {
+    public void setN(Long n) {
         this.n = n;
     }
 

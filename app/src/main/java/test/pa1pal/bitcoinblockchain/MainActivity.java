@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Layout;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -27,6 +30,8 @@ import test.pa1pal.bitcoinblockchain.model.Transaction;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.socket_connection)
+    TextView socketConnectionStatus;
     @BindView(R.id.block_hash)
     TextView blockHash;
     @BindView(R.id.block_height)
@@ -37,10 +42,14 @@ public class MainActivity extends AppCompatActivity {
     TextView blockRewards;
     @BindView(R.id.transaction_recycler_view)
     RecyclerView transactionRecyclerView;
+    @BindView(R.id.clear_transactions)
+    Button clearTransactions;
     List<Transaction> transactionsList;
     Block block;
     Transaction transaction;
     OkHttpClient okHttpClient;
+    BtcAmountJob btcAmountJob;
+    SharedPreferences preferences;
     TransactionRecyclerViewAdapter transactionRecyclerViewAdapter;
     WebSocket blockchainBlockWebSocket;
     WebSocket blockchainTransactionWebSocket;
@@ -54,13 +63,25 @@ public class MainActivity extends AppCompatActivity {
         transactionsList = new ArrayList<>();
         transactionRecyclerViewAdapter = new TransactionRecyclerViewAdapter(transactionsList);
         setUpRecyclerView();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Request blockchainRequest = new Request.Builder().url("wss://ws.blockchain.info/inv").build();
-        BlockchainListener blockchainListener = new BlockchainListener();
+//        btcAmountJob = new BtcAmountJob(getApplicationContext());
+        BtcAmountJob.scheduleJob();
+        BtcAmountJob.startJob();
+
+        clearTransactions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearAllTransactions();
+            }
+        });
+
         blockchainBlockWebSocket = okHttpClient.newWebSocket(blockchainRequest, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
                 super.onOpen(webSocket, response);
-                webSocket.send("{\"op\":\"blocks_sub\"}");
+                webSocket.send("{\"op\":\"ping_block\"}");
+                socketConnectionStatus.setText("Status : Connecting");
             }
 
             @Override
@@ -71,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         updateNewBlockDate(block);
+                        socketConnectionStatus.setText("Status : Connected");
                     }
                 });
 
@@ -95,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(WebSocket webSocket, Throwable t, Response response) {
                 super.onFailure(webSocket, t, response);
+                socketConnectionStatus.setText("Status : Disconnected");
             }
         });
 
@@ -141,6 +164,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void clearAllTransactions() {
+        transactionsList.removeAll(transactionsList);
+        transactionRecyclerViewAdapter.setList(transactionsList);
+    }
+
     private void setUpRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         transactionRecyclerView.setLayoutManager(layoutManager);
@@ -148,14 +176,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateNewBlockDate(Block block) {
-        blockHash.setText(block.getX().getHash());
-        blockHeight.setText(block.getX().getHeight().toString());
-        totalBTCCount.setText(block.getX().getTotalBTCSent().toString());
-        blockRewards.setText(block.getX().getReward().toString());
+        blockHash.setText("Block Hash :" + block.getX().getHash());
+        blockHeight.setText("Block Height :" + block.getX().getHeight().toString());
+        totalBTCCount.setText("Total BTC Count :" + block.getX().getTotalBTCSent().toString());
+        blockRewards.setText("Block Reward :" + block.getX().getReward().toString());
     }
 
     public void updateTransactionData(Transaction transaction) {
-        transactionsList.add(transaction);
-        transactionRecyclerViewAdapter.notifyDataSetChanged();
+        Double amount = Double.parseDouble(preferences.getString("amount", "0.00018911"));
+        /**
+         * 100,000,000 Satoshi	= 1.00000000 ฿
+         */
+        if ((transaction.getX().getInputs().get(0).getPrevOut().getValue().doubleValue() / 100000000) / amount > 100) {
+            if (transactionsList.size() == 5){
+                transactionsList.remove(4);
+                transactionsList.add(transaction);
+            }
+            transactionRecyclerViewAdapter.setList(transactionsList);
+        }
     }
 }

@@ -20,10 +20,15 @@ import test.pa1pal.bitcoinblockchain.model.Transaction;
 public class TransactionRecyclerViewAdapter
         extends RecyclerView.Adapter<TransactionRecyclerViewAdapter.TransactionViewHolder> {
 
-    List<Transaction> transactionList = new ArrayList<>();
+    List<Transaction> list = new ArrayList<>();
 
     public TransactionRecyclerViewAdapter(List<Transaction> transactionsList) {
-        this.transactionList = transactionList;
+        this.list = transactionsList;
+    }
+
+    public void setList(List<Transaction> transactionsList){
+        list = transactionsList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -35,12 +40,12 @@ public class TransactionRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
-        holder.bind(transactionList.get(position));
+        holder.bind(list.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return transactionList.size();
+        return list.size();
     }
 
     class TransactionViewHolder extends RecyclerView.ViewHolder{
